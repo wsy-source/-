@@ -1,0 +1,27 @@
+body{
+    padding: 0 0;
+    margin: 0 0;
+}
+.menu_left p{
+    margin-left: 80px;
+    font-size: 20px;
+    margin-top: -4px;
+}
+
+.context{
+    /*margin-left: 20px;*/
+    width: 300px;
+    height: 465px;
+    padding-top: 80px;
+    font-size: 25px;
+}
+a{
+    color: white;
+    text-decoration: none;
+}
+.bottom{
+    background-color:#41444C;
+    height: 30px;
+    width: 100%;
+    margin-top:300px;
+}

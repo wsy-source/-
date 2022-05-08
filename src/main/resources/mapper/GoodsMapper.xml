@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--带包的全类名-->
+<mapper namespace="com.dao.GoodsDao">
+    <!-- 标签以及要执行的sql语句-->
+
+    <select id="queryAllGoodsByGoodsConditional" resultType="com.bean.Goods">
+        select *
+        from db_shop.goods
+        <where>
+            <if test="goodskind != null">
+                and kind = #{goodskind,jdbcType=VARCHAR}
+            </if>
+            <if test="goodsid != null">
+                and goodsid = #{goodsid,jdbcType=INTEGER}
+            </if>
+            <if test="goodsname != null">
+                and goodsname = #{goodsname,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllGoodsById" resultType="com.bean.vo.GoodsVo">
+        select goods.goodsid, goods.goodsname, goods.price, c.cnt, goods.img, address.address
+        from db_shop.goods
+                     join db_shop.cart c
+                on goods.goodsid = c.goodsid
+                     join db_shop.address
+                on address.userid = c.userid
+        where c.userid = #{userid}
+          and address.defaultAddress = 1
+          and c.state = 0
+    </select>
+
+    <insert id="insertGoods" useGeneratedKeys="true" keyProperty="goodsid">
+        insert db_shop.goods(goodsname, kind, model, price, detail, img)
+        values (#{goodsname,jdbcType=VARCHAR}, #{kind,jdbcType=VARCHAR},
+                #{model,jdbcType=VARCHAR}, #{price,jdbcType=DOUBLE}, #{detail}, #{img});
+    </insert>
+</mapper>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--带包的全类名-->
+<mapper namespace="com.dao.OrderDao">
+    <!-- 标签以及要执行的sql语句-->
+    <insert id="insertOrder" useGeneratedKeys="true" keyProperty="ordid">
+        insert into db_shop.ordertable
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="ordDate != null">
+                ordDate,
+            </if>
+            <if test="admin != null">
+                admin,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="ordDate != null">
+                #{ordDate},
+            </if>
+            <if test="admin != null">
+                #{admin},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                #{state,typeHandler= com.handler.OrderStateTypeHandler},
+            </if>
+        </trim>
+    </insert>
+
+    <!--    查询全部订单-->
+    <select id="queryAdminOrders" resultType="com.bean.vo.OrderVo">
+        select db_shop.ordertable.ordid
+             , db_shop.clientuser.username
+             , db_shop.orderdetail.cnt
+             , db_shop.goods.goodsname
+             , db_shop.ordertable.address
+             , db_shop.clientuser.tel
+        from db_shop.ordertable
+                     join db_shop.clientuser on ordertable.userid = clientuser.userid
+                     join db_shop.orderdetail on ordertable.ordid = orderdetail.ordid
+                     join db_shop.goods on orderdetail.goodsid = goods.goodsid
+        where ordertable.state != 3
+    </select>
+
+    <update id="updateOrderInfo">
+        update db_shop.ordertable
+        <set>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                state = #{state,typeHandler=com.handler.OrderStateTypeHandler}
+            </if>
+        </set>
+        where ordid = #{ordid,jdbcType=INTEGER}
+    </update>
+
+    <select id="queryAdminOrderById" resultType="com.bean.vo.OrderVo">
+        select db_shop.ordertable.ordid
+             , db_shop.clientuser.username
+             , db_shop.orderdetail.cnt
+             , db_shop.goods.goodsname
+             , db_shop.ordertable.address
+             , db_shop.clientuser.tel
+        from db_shop.ordertable
+                     join db_shop.clientuser on ordertable.userid = clientuser.userid
+                     join db_shop.orderdetail on ordertable.ordid = orderdetail.ordid
+                     join db_shop.goods on orderdetail.goodsid = goods.goodsid
+        where ordertable.state != 3 and ordertable.ordid = #{id,jdbcType=INTEGER}
+    </select>
+</mapper>

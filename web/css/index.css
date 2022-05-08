@@ -1,0 +1,52 @@
+* {
+    box-sizing: border-box;
+}
+.background {
+    height: 50px;
+    background-color: whitesmoke;
+}
+nav {
+    position: relative;
+}
+nav #register{
+    position: absolute;
+    right: 0px;
+}
+nav #login {
+    position: absolute;
+    right: 120px;
+}
+
+#topImg {
+    position: absolute;
+    right: 120px;
+}
+
+nav a {
+    line-height: 35px;
+    margin-left: 20px;
+    margin-right: 20px;
+    font-size: 20px;
+    color: deepskyblue;
+}
+.carousel-item img {
+    width: 400px;
+    height: 500px;
+    margin-right: 20px;
+    margin-top: 20px;
+}
+#lunbotu {
+    margin-top: 20px;
+}
+#lunbotu div {
+    overflow: hidden;
+}
+#lunbotu .card{
+    margin: 20px 40px;
+}
+
+nav #login{
+    margin-right: 0;
+}
+
+

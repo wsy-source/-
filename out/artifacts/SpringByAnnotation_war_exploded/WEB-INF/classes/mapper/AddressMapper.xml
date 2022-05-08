@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--带包的全类名-->
+<mapper namespace="com.dao.AddressMapper">
+    <!-- 标签以及要执行的sql语句-->
+    <insert id="insertAddress" useGeneratedKeys="true" keyProperty="aid">
+        insert into db_shop.address
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="defaultAddress != null">
+                defaultAddress,
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="userid != null">
+                 #{userid ,jdbcType=INTEGER},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="defaultAddress != null">
+                #{defaultAddress,jdbcType=INTEGER}
+            </if>
+        </trim>
+    </insert>
+</mapper>

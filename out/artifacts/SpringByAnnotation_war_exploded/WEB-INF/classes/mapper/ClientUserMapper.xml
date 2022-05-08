@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--带包的全类名-->
+<mapper namespace="com.dao.ClientUserMapper">
+    <!-- 标签以及要执行的sql语句-->
+    <select id="queryUserByUsernameAndPassword" resultType="com.bean.Clientuser">
+        select *
+        from db_shop.clientuser
+        where username = #{username,jdbcType=VARCHAR}
+          and password = #{password,jdbcType=VARCHAR}
+    </select>
+
+<!--    传入用户-->
+    <insert id="insertClientUser" useGeneratedKeys="true" keyProperty="userid">
+        insert into db_shop.clientuser
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null">
+                username,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="joinDate != null ">
+                joinDate,
+            </if>
+            <if test="tel !=null ">
+                tel,
+            </if>
+            <if test="photo != null">
+                photo,
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="username != null">
+               #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="joinDate != null ">
+                #{joinDate},
+            </if>
+            <if test="tel !=null ">
+               #{tel,jdbcType=VARCHAR},
+            </if>
+            <if test="photo != null">
+                 #{photo,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="queryUserByConditional" resultType="com.bean.Clientuser">
+        select * from db_shop.clientuser
+        <where>
+            <if test="username != null">
+                and username = #{username,jdbcType=VARCHAR}
+            </if>
+            <if test="password != null and username != null">
+                and username = #{username,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
+            </if>
+            <if test="pid != null">
+                and pid = #{pid,jdbcType=VARCHAR}
+            </if>
+            <if test="tel != null">
+                and tel = #{tel,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+</mapper>

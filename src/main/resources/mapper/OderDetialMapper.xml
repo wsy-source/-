@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--带包的全类名-->
+<mapper namespace="com.dao.OrderDetailDao">
+    <!-- 标签以及要执行的sql语句-->
+
+    <insert id="insertOrderDetail" useGeneratedKeys="true" keyProperty="did">
+        insert into db_shop.orderdetail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ordid != null">
+                ordid,
+            </if>
+            <if test="goodsid != null">
+                goodsid,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="cnt != null">
+                cnt,
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="ordid != null">
+                #{ordid,jdbcType=INTEGER},
+            </if>
+            <if test="goodsid != null">
+                #{goodsid,jdbcType=INTEGER},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="cnt != null">
+                #{cnt},
+            </if>
+        </trim>
+    </insert>
+</mapper>

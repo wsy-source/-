@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--带包的全类名-->
+<mapper namespace="com.dao.CartDao">
+    <resultMap id="handler" type="com.bean.dto.CartStatesDto">
+        <result property="cartState" column="state" typeHandler="com.handler.CartEnumTypeHandler"/>
+    </resultMap>
+    <insert id="addCart" useGeneratedKeys="true" keyProperty="cartid">
+        insert into db_shop.cart(userid, goodsid, price, cnt)
+        <trim prefix="values(" suffixOverrides="," suffix=")">
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="goodsid != null">
+                #{goodsid,jdbcType=INTEGER},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="cnt != null">
+                #{cnt,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateCartCount">
+        update db_shop.cart
+        <set>
+            <if test="count != null">
+                cnt = cnt + #{count,jdbcType=INTEGER},
+            </if>
+        </set>
+        where goodsid = #{cart.goodsid,jdbcType=INTEGER}
+          and userid = #{cart.userid,jdbcType=INTEGER}
+        and state = 0
+    </update>
+
+    <update id="updateCartState">
+        update db_shop.cart
+        <set>
+            <if test="state != null">
+                state = #{state,typeHandler=com.handler.CartEnumTypeHandler}
+            </if>
+        </set>
+        where userid = #{userid,jdbcType=INTEGER}
+          and goodsid in
+        <foreach collection="goodsid" separator="," open="(" close=")" item="id">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+    <!--   @Select("select db_shop.cart.state where db_shop.cart.userid = #{userid} and db_shop.cart.goodsid= #{goodsid} ")-->
+    <select id="queryCartStateByUseridAndGoodsId" resultMap="handler">
+        select db_shop.cart.state
+        from db_shop.cart
+        where db_shop.cart.goodsid = #{goodsid,jdbcType=INTEGER}
+          and db_shop.cart.userid = #{userid,jdbcType=INTEGER}
+        and db_shop.cart.state = 0
+    </select>
+</mapper>
